@@ -2,10 +2,10 @@
 
 namespace BeatThis.Game.AnimationEvents
 {
-    interface IAnimated
+    public interface IAnimated
     {
-        public void OnAnimationStart(Type ActionType);
+        public void OnAnimationStart(Type actionType);
 
-        public void OnAnimationEnd(Type ActionType);
+        public void OnAnimationEnd(Type actionType);
     }
 }

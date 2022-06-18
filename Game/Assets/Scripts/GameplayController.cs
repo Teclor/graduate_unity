@@ -21,15 +21,15 @@ namespace BeatThis.Game
         private ProcessableActionRegistry actionRegistry;
         
 
-        void Start()
+        public void Start()
         { 
             if (Settings.GetInstance().IsEmpty())
             {
-                initializeSettings();
+                InitializeSettings();
             }
             mainCharacterController = mainCharacter.GetComponent<MainCharacterController>();
             mainCharacterController.Init();
-            initializeActionRegistry();
+            InitializeActionRegistry();
             mainCharacterController.SetActionRegistry(actionRegistry);
             actionChecker = new ActionChecker(actionRegistry, actionDetector);
             mapGenerator.SetActionChecker(actionChecker);
@@ -37,7 +37,7 @@ namespace BeatThis.Game
             mapGenerator.Generate(mainCharacterController.MoveSpeed, mainCharacter.transform.position.z);
         }
 
-        private void initializeActionRegistry()
+        private void InitializeActionRegistry()
         {
             actionRegistry = new ProcessableActionRegistry();
             actionRegistry.AddAction(new UpAction(mainCharacterController));
@@ -46,10 +46,9 @@ namespace BeatThis.Game
             actionRegistry.AddAction(new SingleTapAction(mainCharacterController));
         }
 
-        private void initializeSettings()
+        private void InitializeSettings()
         {
             Settings settings = Settings.GetInstance();
-            settings.Set("mapPartLength", "65.22776");
             settings.Set("defaultUnitsPerSecond", "2.435762");
             settings.Set("sideUnitsPerSecond", "1.3");
             settings.Set("laneDistance", "1.4");

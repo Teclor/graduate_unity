@@ -13,18 +13,19 @@ namespace BeatThis.Game.Generators
         private float moveSpeed;
         private int seed;
         public ObstaclePool generatedObstacles { get; private set; }
-        public void Awake()
+        public void Init()
         {
             generatedObstacles = new ObstaclePool();
             availableLanesByObstacle = new Dictionary<string, int[]>();
         }
-        public void Generate(List<float> timestamps, float characterMoveSpeed, int mapSeed)
+        public void Generate(List<float> timestamps, float characterMoveSpeed, int mapSeed, float characterStartPositionZ)
         {
+            Init();
             FillObstacleAvailableLanes();
             moveSpeed = characterMoveSpeed;
             seed = mapSeed;
             Random.InitState(seed);
-            StartCoroutine(OnGeneratingRoutine(timestamps));
+            StartCoroutine(GenerateObstaclesCoroutine(timestamps));
         }
 
         private void FillObstacleAvailableLanes()
@@ -35,7 +36,7 @@ namespace BeatThis.Game.Generators
             }
         }
 
-        private IEnumerator OnGeneratingRoutine(List<float> timestamps)
+        private IEnumerator GenerateObstaclesCoroutine(List<float> timestamps)
         {
             float defaultUnitsPerSecond = Settings.GetInstance().GetFloat("defaultUnitsPerSecond");
             foreach (float time in timestamps)
@@ -54,7 +55,6 @@ namespace BeatThis.Game.Generators
 
                 GameObject obstacleGameObject = Instantiate(generatingObstacle, position, generatingObstacle.transform.rotation);
                 IObstacle obstacleObject = obstacleGameObject.GetComponent<IObstacle>();
-                obstacleObject.Lane = obstacleLane;
 
                 ObstacleEntity generatedObstacle = new ObstacleEntity(time, obstacleLane, obstacleObject);
                 generatedObstacles.Add(generatedObstacle);

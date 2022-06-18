@@ -1,3 +1,5 @@
+using BeatThis.Game.Controllers;
+
 namespace BeatThis.Game.ControlActions
 {
     public abstract class BaseControlAction : IProcessableAction
@@ -17,6 +19,7 @@ namespace BeatThis.Game.ControlActions
         {
             isProcessing = true;
         }
+
         public void FinishProcessing()
         {
             isProcessing = false;

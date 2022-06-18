@@ -1,4 +1,4 @@
-namespace BeatThis.Game
+namespace BeatThis.Game.Controllers
 {
     public interface IControllerable
     {

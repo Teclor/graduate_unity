@@ -19,11 +19,11 @@ namespace BeatThis.Game
             this.actionDetector = actionDetector;
             checkTimeOffset = checkTimeOffsetInSeconds;
         }
-        public bool CheckFitsInTime(IObstacle obstacle, float time)
+        public bool IsApplicableActionInTime(IObstacle obstacle, float time)
         {
             Type[] obstacleActions = obstacle.ApplicableActions;
             bool isInTime = false;
-            if (obstacleActions.Contains(actionDetector.GetLastAction()))
+            if (obstacleActions.Contains(actionDetector.LastAction))
             {
                 bool isActionActive = false;
                 foreach (Type controlActionType in obstacleActions)

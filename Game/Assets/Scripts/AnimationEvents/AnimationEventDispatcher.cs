@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BeatThis.Game.ControlActions;
+using BeatThis.Game.Controllers;
 
 namespace BeatThis.Game.AnimationEvents
 {

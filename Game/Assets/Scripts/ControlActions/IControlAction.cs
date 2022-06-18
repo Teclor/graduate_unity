@@ -1,4 +1,6 @@
-﻿namespace BeatThis.Game.ControlActions
+﻿using BeatThis.Game.Controllers;
+
+namespace BeatThis.Game.ControlActions
 {
     public interface IControlAction
     {

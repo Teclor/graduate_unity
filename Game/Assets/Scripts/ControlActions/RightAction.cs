@@ -1,3 +1,5 @@
+using BeatThis.Game.Controllers;
+
 namespace BeatThis.Game.ControlActions
 {
     public class RightAction : BaseControlAction

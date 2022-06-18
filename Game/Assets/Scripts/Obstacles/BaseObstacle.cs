@@ -9,7 +9,6 @@ namespace BeatThis.Game.Obstacles
         public abstract int[] AvailableLanes { get; }
         public abstract Type[] ApplicableActions { get; }
         public virtual int LaneWidth { get; } = 1;
-        public virtual int Lane { get; set; } = 0;
         protected bool isPassed = false;
         public virtual bool StrictLaneCheck { get; } = false;
 

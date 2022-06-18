@@ -1,6 +1,8 @@
 ﻿using BeatThis.Game.ControlActions;
 using BeatThis.Game.Generators;
+using BeatThis.Game.Controllers;
 using UnityEngine;
+
 
 namespace BeatThis.Game
 {
@@ -13,6 +15,7 @@ namespace BeatThis.Game
         [SerializeField] private ActionDetector actionDetector;
         [SerializeField] private SceneChanger sceneChanger;
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private float startTimeOffset;
         private MainCharacterController mainCharacterController;
         private ActionChecker actionChecker;
         private ProcessableActionRegistry actionRegistry;
@@ -30,7 +33,8 @@ namespace BeatThis.Game
             mainCharacterController.SetActionRegistry(actionRegistry);
             actionChecker = new ActionChecker(actionRegistry, actionDetector);
             mapGenerator.SetActionChecker(actionChecker);
-            mapGenerator.Generate();
+            mapGenerator.startTimeOffset = startTimeOffset;
+            mapGenerator.Generate(mainCharacterController.MoveSpeed, mainCharacter.transform.position.z);
         }
 
         private void initializeActionRegistry()
@@ -47,10 +51,10 @@ namespace BeatThis.Game
             Settings settings = Settings.GetInstance();
             settings.Set("mapPartLength", "65.22776");
             settings.Set("defaultUnitsPerSecond", "2.435762"); //rena speed
-            settings.Set("sideUnitsPerSecond", "1.3");
+            settings.Set("sideUnitsPerSecond", "1.2");
             //settings.Set("defaultUnitsPerSecond", "2.945884"); // man_04 speed
             settings.Set("laneDistance", "1.4");
-            settings.Set("mapSeed", "1655138556");
+            //settings.Set("mapSeed", "1655138556");
         }
 
         private void Update()
@@ -59,9 +63,9 @@ namespace BeatThis.Game
             {
                 sceneChanger.LoadMenuScene();
             }
-            if (actionDetector.GetCurrentAction() != null)
+            if (actionDetector.CurrentAction != null)
             {
-                actionRegistry.GetAction(actionDetector.GetCurrentAction()).CallControllerAction();
+                actionRegistry.GetAction(actionDetector.CurrentAction).CallControllerAction();
             }
             
         }

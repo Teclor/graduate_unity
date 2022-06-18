@@ -1,5 +1,6 @@
 using UnityEngine;
 using BeatThis.Game.Generators;
+using BeatThis.Game.Controllers;
 
 namespace BeatThis.Game.Obstacles
 {
@@ -29,20 +30,23 @@ namespace BeatThis.Game.Obstacles
             if (IsTracking && actionChecker != null)
             {
                 ObstacleEntity nearestObstacle = obstaclePool.Get();
-                if (obstaclePool.Get() != null)
+                if (nearestObstacle != null)
                 {
                     if (actionChecker.IsCheckTimeReached(nearestObstacle.GetTime()))
                     {
-                        //Debug.Log(Time.timeSinceLevelLoad + " reach time for " + nearestObstacle.time); //TODO: DELETE LOGGING
                         IObstacle obstacleObject = nearestObstacle.GetObstacle();
                         if (obstacleObject != null)
                         {
-                            if (!obstacleObject.IsPassed())
+                            if (obstacleObject.IsPassed())
                             {
-                                bool isObstacleAvoided = !obstacleObject.StrictLaneCheck && obstacleObject.LaneWidth == 1 && mainCharacterController.CurrentLane != obstacleObject.Lane;
-                                bool isCharacterOnCorrectLane = obstacleObject.StrictLaneCheck ? mainCharacterController.CurrentLane == obstacleObject.Lane : true;
-                                bool isActionInTime = isObstacleAvoided || actionChecker.CheckFitsInTime(obstacleObject, nearestObstacle.GetTime());
-                                //Debug.Log($"isObstacleAvoided {isObstacleAvoided} isCharacterOnCorrectLane {isCharacterOnCorrectLane} isActionInTime {isActionInTime}");
+                                obstaclePool.Retrieve();
+                            }
+                            else
+                            {
+                                bool isObstacleAvoided = !obstacleObject.StrictLaneCheck && obstacleObject.LaneWidth == 1 && mainCharacterController.CurrentLane != nearestObstacle.GetLane();
+                                bool isCharacterOnCorrectLane = obstacleObject.StrictLaneCheck ? mainCharacterController.CurrentLane == nearestObstacle.GetLane() : true;
+                                bool isActionInTime = isObstacleAvoided || actionChecker.IsApplicableActionInTime(obstacleObject, nearestObstacle.GetTime());
+
                                 if (isObstacleAvoided || (isCharacterOnCorrectLane && isActionInTime))
                                 {
                                     obstacleObject.Pass();
@@ -57,7 +61,6 @@ namespace BeatThis.Game.Obstacles
                                     sceneChanger.LoadGameOverScene();
                                 }
                             }
-
                         }
                         else
                         {

@@ -81,6 +81,8 @@ Assets/Plugins/Git*
 /Game/*
 !/Game/Assets
 /Game/Assets/*
+!/Game/Assets/Tests
+!/Game/Assets/Tests/*
 !/Game/Assets/Scripts
 !/Game/Assets/Scripts/*
 !/Tools

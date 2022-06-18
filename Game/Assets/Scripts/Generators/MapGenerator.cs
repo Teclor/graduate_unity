@@ -15,22 +15,20 @@ namespace BeatThis.Game.Generators
         private List<float> timestamps;
         private AudioSource musicTrack;
         private int mapSeed = 0;
-        [SerializeField] private float startTimeOffset;
+        public float startTimeOffset { get; set; } = 0;
 
-        [SerializeField] private GameObject character;
-        private MainCharacterController mainCharacterController;
         [SerializeField] private GameObject obstacleGeneratorObject;
-        [SerializeField] private GameObject alley;
+        [SerializeField] private GameObject mapPart;
 
         private ActionChecker actionChecker;
 
-        public void Generate()
+        public void Generate(float characterMoveSpeed, float characterStartPositionZ = 0)
         {
             int.TryParse(Settings.GetInstance().Get("mapSeed"), out mapSeed);
             mapSeed = (mapSeed > 0) ? mapSeed : (int)DateTimeOffset.Now.ToUnixTimeSeconds();
             Debug.Log(string.Format("Seed: {0}", mapSeed));
             timestamps = new List<float>();
-            mainCharacterController = character.GetComponent<MainCharacterController>();
+
             if (mapName == null)
             {
                 mapName = defaultMapName;
@@ -38,11 +36,11 @@ namespace BeatThis.Game.Generators
             mapPath = string.Format(mapPath, mapName);
             LoadMapTimestamps();
             LoadMusic();
-            obstacleGeneratorObject.GetComponent<ObstacleGenerator>().Generate(timestamps, mainCharacterController.MoveSpeed, mapSeed);
+            obstacleGeneratorObject.GetComponent<ObstacleGenerator>().Generate(timestamps, characterMoveSpeed, mapSeed, characterStartPositionZ);
             StartCoroutine(StartMusicCoroutine());
             StartCoroutine(StartTrackingCoroutine());
 
-            float mapPartLength = Settings.GetInstance().GetFloat("mapPartLength");
+            float mapPartLength = mapPart.transform.Find("Road").GetComponent<Renderer>().bounds.size.z;
             int mapPartsQuantity = CalculateMapPartsQuantity(timestamps[timestamps.Count - 1], mapPartLength);
             StartCoroutine(GenerateMapFromPartsCoroutine(mapPartsQuantity, mapPartLength));
         }
@@ -89,9 +87,9 @@ namespace BeatThis.Game.Generators
 
         private IEnumerator GenerateMapFromPartsCoroutine(int mapPartsQuantity, float mapPartLength)
         {
-            for (int i = 1; i <= mapPartsQuantity; i++)
+            for (int i = 0; i < mapPartsQuantity; i++)
             {
-                Instantiate(alley, new Vector3(alley.transform.position.x, alley.transform.position.y, i * mapPartLength), alley.transform.rotation);
+                Instantiate(mapPart, new Vector3(mapPart.transform.position.x, mapPart.transform.position.y, i * mapPartLength), mapPart.transform.rotation);
                 yield return new WaitForEndOfFrame();
             }
         }

@@ -5,7 +5,7 @@ using BeatThis.Game.ControlActions;
 using BeatThis.Game.AnimationEvents;
 using System.Collections;
 
-namespace BeatThis.Game
+namespace BeatThis.Game.Controllers
 {
     [RequireComponent(typeof(CharacterController))]
     public class MainCharacterController : MonoBehaviour, IControllerable, IAnimated

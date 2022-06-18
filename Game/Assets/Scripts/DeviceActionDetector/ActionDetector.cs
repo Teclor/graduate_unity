@@ -5,33 +5,23 @@ namespace BeatThis.Game
 {
     public class ActionDetector : MonoBehaviour
     {
-        private Type currentAction;
-        private Type lastAction;
+        public Type CurrentAction { get; protected set; }
+        public Type LastAction { get; protected set; }
 
         private void Update()
         {
             if(SystemInfo.deviceType == DeviceType.Handheld)
             {
-                currentAction = MobileActionDetector.GetAction();
+                CurrentAction = MobileActionDetector.GetAction();
             }
             else
             {
-                currentAction = DesktopActionDetectorMock.GetAction();
+                CurrentAction = DesktopActionDetectorMock.GetAction();
             }
-            if (currentAction != null)
+            if (CurrentAction != null)
             {
-                lastAction = currentAction;
+                LastAction = CurrentAction;
             }
-        }
-
-        public Type GetCurrentAction()
-        {
-            return currentAction;
-        }
-
-        public Type GetLastAction()
-        {
-            return lastAction;
         }
     }
 }

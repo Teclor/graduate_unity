@@ -3,13 +3,13 @@
     public class ObstacleEntity
     {
         private float time;
-        private int line;
+        private int lane;
         private IObstacle obstacleObject;
 
-        public ObstacleEntity(float time, int line, IObstacle obstacleObject)
+        public ObstacleEntity(float time, int lane, IObstacle obstacleObject)
         {
             this.time = time;
-            this.line = line;
+            this.lane = lane;
             this.obstacleObject = obstacleObject;
         }
 
@@ -18,9 +18,9 @@
             return time;
         }
 
-        public int GetLine()
+        public int GetLane()
         {
-            return line;
+            return lane;
         }
 
         public IObstacle GetObstacle()

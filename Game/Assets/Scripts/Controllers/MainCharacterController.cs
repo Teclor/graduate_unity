@@ -36,7 +36,7 @@ namespace BeatThis.Game.Controllers
 
         public void MoveForFixedUpdate()
         {
-            float calculatedMoveSpeed = baseMoveSpeed * (MoveSpeed + speedCompensation) * Time.fixedDeltaTime;
+            float calculatedMoveSpeed = (baseMoveSpeed + speedCompensation) * MoveSpeed * Time.fixedDeltaTime;
             controller.Move(moveDirection * calculatedMoveSpeed);
         }
 

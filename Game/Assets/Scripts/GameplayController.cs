@@ -50,9 +50,8 @@ namespace BeatThis.Game
         {
             Settings settings = Settings.GetInstance();
             settings.Set("mapPartLength", "65.22776");
-            settings.Set("defaultUnitsPerSecond", "2.435762"); //rena speed
-            settings.Set("sideUnitsPerSecond", "1.2");
-            //settings.Set("defaultUnitsPerSecond", "2.945884"); // man_04 speed
+            settings.Set("defaultUnitsPerSecond", "2.435762");
+            settings.Set("sideUnitsPerSecond", "1.3");
             settings.Set("laneDistance", "1.4");
             //settings.Set("mapSeed", "1655138556");
         }

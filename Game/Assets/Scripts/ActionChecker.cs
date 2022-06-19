@@ -25,17 +25,7 @@ namespace BeatThis.Game
             bool isInTime = false;
             if (obstacleActions.Contains(actionDetector.LastAction))
             {
-                bool isActionActive = false;
-                foreach (Type controlActionType in obstacleActions)
-                {
-                    if (actionRegistry.GetAction(controlActionType).IsProcessing())
-                    {
-                        isActionActive = true;
-                        break;
-                    }
-                }
-
-                if (isActionActive)
+                if (actionRegistry.GetAction(actionDetector.LastAction).IsProcessing())
                 {
                     if (IsCheckTimeReached(time) && !IsCheckTimeELapsed(time))
                     {

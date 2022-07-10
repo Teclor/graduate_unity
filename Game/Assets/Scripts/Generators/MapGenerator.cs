@@ -41,7 +41,7 @@ namespace BeatThis.Game.Generators
             StartCoroutine(StartTrackingCoroutine());
 
             float mapPartLength = mapPart.transform.Find("Road").GetComponent<Renderer>().bounds.size.z;
-            int mapPartsQuantity = CalculateMapPartsQuantity(timestamps[timestamps.Count - 1], mapPartLength);
+            int mapPartsQuantity = CalculateMapPartsQuantity(timestamps[timestamps.Count - 1], mapPartLength, characterMoveSpeed);
             StartCoroutine(GenerateMapFromPartsCoroutine(mapPartsQuantity, mapPartLength));
         }
 
@@ -78,10 +78,10 @@ namespace BeatThis.Game.Generators
             obstacleGeneratorObject.GetComponent<ObstaclePassTracker>().StartTracking(actionChecker);
         }
 
-        private int CalculateMapPartsQuantity(float lastTimeStamp, float mapPartLength, int additionalMapPartsQuantity = 5)
+        private int CalculateMapPartsQuantity(float lastTimeStamp, float mapPartLength, float characterMoveSpeed, int additionalMapPartsQuantity = 5)
         {
             float defaultUnitsPerSecond = Settings.GetInstance().GetFloat("defaultUnitsPerSecond");
-            float totalUnits = defaultUnitsPerSecond * lastTimeStamp;
+            float totalUnits = defaultUnitsPerSecond * characterMoveSpeed * lastTimeStamp;
             return (int)(totalUnits / mapPartLength) + additionalMapPartsQuantity;
         }
 

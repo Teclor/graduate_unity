@@ -9,7 +9,6 @@ namespace BeatThis.Game.Controllers
         public void Right();
 
         public void Attack();
-
-        public void Down();
+        void Down();
     }
 }

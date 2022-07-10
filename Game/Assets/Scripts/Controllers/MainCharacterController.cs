@@ -85,7 +85,7 @@ namespace BeatThis.Game.Controllers
             if (ActionType == typeof(LeftAction) || ActionType == typeof(RightAction))
             {
                 speedCompensation = -Settings.GetInstance().GetFloat("sideUnitsPerSecond");
-            }    
+            }
             actionRegistry.GetAction(ActionType).StartProcessing();
         }
 

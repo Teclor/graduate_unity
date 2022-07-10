@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BeatThis.Game.ControlActions;
-using BeatThis.Game.Controllers;
+
 
 namespace BeatThis.Game.AnimationEvents
 {
     class AnimationEventDispatcher : MonoBehaviour
     {
         public Dictionary<string, Type> EventToActionMap;
-        [SerializeField] private MainCharacterController mainController;
+        private IAnimated mainController;
 
-        public AnimationEventDispatcher()
+        public void Start()
         {
+            mainController = GetComponent<IAnimated>();
             EventToActionMap = new Dictionary<string, Type>
             {
                 { "Attack", typeof(SingleTapAction) },

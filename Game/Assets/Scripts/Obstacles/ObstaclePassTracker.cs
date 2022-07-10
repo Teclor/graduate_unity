@@ -34,8 +34,6 @@ namespace BeatThis.Game.Obstacles
                 {
                     if (actionChecker.IsCheckTimeReached(nearestObstacle.GetTime()))
                     {
-                        //Debug.Log((Time.timeSinceLevelLoad - 1.0f) + " reach time for " + (nearestObstacle.GetTime() - 1.0f).ToString()); //TODO: DELETE LOGGING
-
                         IObstacle obstacleObject = nearestObstacle.GetObstacle();
                         if (obstacleObject != null)
                         {
@@ -48,7 +46,6 @@ namespace BeatThis.Game.Obstacles
                                 bool isObstacleAvoided = !obstacleObject.StrictLaneCheck && obstacleObject.LaneWidth == 1 && mainCharacterController.CurrentLane != nearestObstacle.GetLane();
                                 bool isCharacterOnCorrectLane = obstacleObject.StrictLaneCheck ? mainCharacterController.CurrentLane == nearestObstacle.GetLane() : true;
                                 bool isActionInTime = isObstacleAvoided || actionChecker.IsApplicableActionInTime(obstacleObject, nearestObstacle.GetTime());
-                                //Debug.Log($"isObstacleAvoided {isObstacleAvoided} isCharacterOnCorrectLane {isCharacterOnCorrectLane} isActionInTime {isActionInTime}");
 
                                 if (isObstacleAvoided || (isCharacterOnCorrectLane && isActionInTime))
                                 {

@@ -23,7 +23,7 @@ namespace BeatThis.Game.ControlActions
         }
         public IProcessableAction GetAction(Type actionType)
         {
-            return controlActions[actionType];
+            return controlActions.GetValueOrDefault(actionType);
         }
     }
 }

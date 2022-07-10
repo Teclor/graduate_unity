@@ -2,7 +2,7 @@
 using BeatThis.Game.Generators;
 using BeatThis.Game.Controllers;
 using UnityEngine;
-
+using System.Collections;
 
 namespace BeatThis.Game
 {
@@ -19,7 +19,7 @@ namespace BeatThis.Game
         private MainCharacterController mainCharacterController;
         private ActionChecker actionChecker;
         private ProcessableActionRegistry actionRegistry;
-        
+        private bool isEndOfGameTrackingStarted = false;
 
         public void Start()
         { 
@@ -52,26 +52,31 @@ namespace BeatThis.Game
             settings.Set("defaultUnitsPerSecond", "2.435762");
             settings.Set("sideUnitsPerSecond", "1.33");
             settings.Set("laneDistance", "1.4");
-            //settings.Set("mapSeed", "1655138556");
-            settings.Set("mapSeed", "1655600239");
         }
 
         private void Update()
         {
-            if (audioSource.time >= audioSource.clip.length)
+            if (audioSource.isPlaying && !isEndOfGameTrackingStarted)
             {
-                sceneChanger.LoadMenuScene();
+                isEndOfGameTrackingStarted = true;
+                StartCoroutine(FinishGameCoroutine());
             }
+
             if (actionDetector.CurrentAction != null)
             {
                 actionRegistry.GetAction(actionDetector.CurrentAction).CallControllerAction();
             }
-            
         }
 
         private void FixedUpdate()
         {
             mainCharacterController.MoveForFixedUpdate();
+        }
+
+        private IEnumerator FinishGameCoroutine()
+        {
+            yield return new WaitForSeconds(audioSource.clip.length);
+            sceneChanger.LoadMenuScene();
         }
     }
 }

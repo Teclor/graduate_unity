@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BeatThis.Game.Obstacles;
+using BeatThis.Game.Controllers;
 using System;
 using Newtonsoft.Json;
 
@@ -16,14 +17,16 @@ namespace BeatThis.Game.Generators
         private AudioSource musicTrack;
         private int mapSeed = 0;
         public float startTimeOffset { get; set; } = 0;
+        private MainCharacterController mainCharacterController;
 
         [SerializeField] private GameObject obstacleGeneratorObject;
         [SerializeField] private GameObject mapPart;
 
         private ActionChecker actionChecker;
 
-        public void Generate(float characterMoveSpeed, float characterStartPositionZ = 0)
+        public void Generate(MainCharacterController mainCharacterController)
         {
+            this.mainCharacterController = mainCharacterController;
             int.TryParse(Settings.GetInstance().Get("mapSeed"), out mapSeed);
             mapSeed = (mapSeed > 0) ? mapSeed : (int)DateTimeOffset.Now.ToUnixTimeSeconds();
             Debug.Log(string.Format("Seed: {0}", mapSeed));
@@ -36,12 +39,13 @@ namespace BeatThis.Game.Generators
             mapPath = string.Format(mapPath, mapName);
             LoadMapTimestamps();
             LoadMusic();
-            obstacleGeneratorObject.GetComponent<ObstacleGenerator>().Generate(timestamps, characterMoveSpeed, mapSeed, characterStartPositionZ);
+            obstacleGeneratorObject.GetComponent<ObstaclePassTracker>().SetCharacterController(mainCharacterController);
+            obstacleGeneratorObject.GetComponent<ObstacleGenerator>().Generate(timestamps, mainCharacterController.MoveSpeed, mapSeed, mainCharacterController.transform.position.z);
             StartCoroutine(StartMusicCoroutine());
             StartCoroutine(StartTrackingCoroutine());
 
             float mapPartLength = mapPart.transform.Find("Road").GetComponent<Renderer>().bounds.size.z;
-            int mapPartsQuantity = CalculateMapPartsQuantity(timestamps[timestamps.Count - 1], mapPartLength, characterMoveSpeed);
+            int mapPartsQuantity = CalculateMapPartsQuantity(timestamps[timestamps.Count - 1], mapPartLength);
             StartCoroutine(GenerateMapFromPartsCoroutine(mapPartsQuantity, mapPartLength));
         }
 
@@ -78,8 +82,9 @@ namespace BeatThis.Game.Generators
             obstacleGeneratorObject.GetComponent<ObstaclePassTracker>().StartTracking(actionChecker);
         }
 
-        private int CalculateMapPartsQuantity(float lastTimeStamp, float mapPartLength, float characterMoveSpeed, int additionalMapPartsQuantity = 5)
+        private int CalculateMapPartsQuantity(float lastTimeStamp, float mapPartLength, int additionalMapPartsQuantity = 5)
         {
+            float characterMoveSpeed = mainCharacterController.MoveSpeed;
             float defaultUnitsPerSecond = Settings.GetInstance().GetFloat("defaultUnitsPerSecond");
             float totalUnits = defaultUnitsPerSecond * characterMoveSpeed * lastTimeStamp;
             return (int)(totalUnits / mapPartLength) + additionalMapPartsQuantity;

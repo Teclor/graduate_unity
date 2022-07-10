@@ -8,7 +8,6 @@ namespace BeatThis.Game.Obstacles
     {
         public static bool IsTracking = false;
         private ObstaclePool obstaclePool;
-        [SerializeField] private GameObject character;
         private MainCharacterController mainCharacterController;
         private ActionChecker actionChecker;
         [SerializeField] SceneChanger sceneChanger;
@@ -17,9 +16,13 @@ namespace BeatThis.Game.Obstacles
             IsTracking = false;
         }
 
+        public void SetCharacterController(MainCharacterController characterController)
+        {
+            mainCharacterController = characterController;
+        }
+
         public void StartTracking(ActionChecker actionChecker)
         {
-            mainCharacterController = character.GetComponent<MainCharacterController>();
             obstaclePool = GetComponent<ObstacleGenerator>().generatedObstacles;
             this.actionChecker = actionChecker;
             IsTracking = true;

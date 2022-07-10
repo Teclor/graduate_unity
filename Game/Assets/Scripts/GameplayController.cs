@@ -34,7 +34,7 @@ namespace BeatThis.Game
             actionChecker = new ActionChecker(actionRegistry, actionDetector);
             mapGenerator.SetActionChecker(actionChecker);
             mapGenerator.startTimeOffset = startTimeOffset;
-            mapGenerator.Generate(mainCharacterController.MoveSpeed, mainCharacter.transform.position.z);
+            mapGenerator.Generate(mainCharacterController);
         }
 
         private void InitializeActionRegistry()
